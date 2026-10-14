@@ -1,0 +1,8 @@
+node_modules/
+models/
+vendor/
+out/
+dist/
+web/public/ort/
+web/public/coi-serviceworker.min.js
+.venv/

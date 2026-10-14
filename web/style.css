@@ -1,0 +1,439 @@
+:root {
+  --paper: #ffffff;
+  --panel: #f4f4f2;
+  --ink: #111111;
+  --muted: #5f5f5b;
+  --rule: #dcdcd7;
+  --accent: #1f5d3a;
+  --accent-ink: #ffffff;
+  --error: #c0261a;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 46rem;
+  padding: 4rem 1.25rem 5rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  margin-bottom: 2.5rem;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 6.5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  margin: 0 0 0.9rem;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin: 0;
+  max-width: 32rem;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border: 2px solid var(--ink);
+  margin-bottom: 2.5rem;
+}
+
+.tabs button {
+  flex: 1;
+  font: 600 0.95rem var(--sans);
+  letter-spacing: 0.01em;
+  background: var(--paper);
+  color: var(--ink);
+  border: none;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+}
+
+.tabs button + button {
+  border-left: 2px solid var(--ink);
+}
+
+.tabs button[aria-selected='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Buttons and fields */
+button {
+  font: 600 0.95rem var(--sans);
+  border-radius: 0;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.7rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+button:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+button.primary:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+button.link {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.25rem 0;
+}
+
+button.link:hover:not(:disabled) {
+  background: none;
+  color: var(--ink);
+}
+
+input[type='text'],
+textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 0.7rem 0.8rem;
+}
+
+input[type='text']:focus,
+textarea:focus {
+  border-color: var(--ink);
+  outline: none;
+}
+
+textarea {
+  font: 1.125rem/1.7 var(--serif);
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* Drop zone */
+.drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 14rem;
+  background: var(--panel);
+  border: 2px dashed var(--rule);
+  cursor: pointer;
+  text-align: center;
+  padding: 1rem;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.drop.over,
+.drop:hover {
+  border-color: var(--ink);
+}
+
+.drop input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.drop-main {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.drop-sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Setup: photo + subject */
+.setup {
+  display: grid;
+  grid-template-columns: 256px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 36rem) {
+  .setup {
+    grid-template-columns: 1fr;
+  }
+}
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.setup-form label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hint {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.photo {
+  margin: 0;
+}
+
+.photo canvas {
+  display: block;
+  width: 100%;
+  max-width: 256px;
+  aspect-ratio: 1;
+  background: var(--panel);
+}
+
+.photo figcaption {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+
+.result {
+  margin: 2rem auto 0;
+  max-width: 384px;
+}
+
+.result canvas {
+  max-width: 384px;
+}
+
+/* Story */
+.story {
+  margin-top: 3rem;
+}
+
+#story-text {
+  font: 1.2rem/1.75 var(--serif);
+  white-space: pre-wrap;
+  hyphens: auto;
+  min-height: 3em;
+  margin: 1.75rem 0 0;
+}
+
+/* A button whose label swaps ("Copy story" -> "Copied") without changing
+   width: both labels share one grid cell and only one is visible. */
+.swap {
+  display: inline-grid;
+}
+
+.swap > span {
+  grid-area: 1 / 1;
+}
+
+.swap > span:last-child,
+.swap.done > span:first-child {
+  visibility: hidden;
+}
+
+.swap.done > span:last-child {
+  visibility: visible;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+
+/* Progress */
+.meter {
+  height: 10px;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  margin: 1.25rem 0 0.6rem;
+}
+
+.meter-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.15s;
+}
+
+/* Busy but with no measurable progress (e.g. the captioner generating). */
+.meter.indeterminate .meter-fill {
+  width: 30% !important;
+  transition: none;
+  animation: meter-slide 1.1s ease-in-out infinite;
+}
+
+@keyframes meter-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+.setup-form .meter {
+  width: 100%;
+  margin: 0.1rem 0 0;
+}
+
+.status {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 0;
+  min-height: 1.3em;
+  font-variant-numeric: tabular-nums;
+}
+
+.error {
+  color: var(--error);
+  border-left: 4px solid var(--error);
+  padding: 0.25rem 0 0.25rem 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 1.25rem;
+}
+
+/* Model downloads */
+.downloads {
+  margin-top: 2.5rem;
+  background: var(--panel);
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+}
+
+.downloads h3 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.75rem;
+}
+
+.downloads ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.downloads li {
+  display: grid;
+  grid-template-columns: 8rem 1fr 7rem;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.downloads .meter {
+  margin: 0;
+  background: var(--paper);
+}
+
+.downloads .amount {
+  text-align: right;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+footer {
+  margin-top: 5rem;
+  border-top: 2px solid var(--ink);
+  padding-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+footer h3:not(:first-child) {
+  margin-top: 2rem;
+}
+
+footer strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+footer h3 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin: 0 0 0.75rem;
+}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A Picture Is Worth 1,000 Words</title>
+    <meta name="description" content="Hide a photograph inside a short story, and bring it back from the words alone." />
+    <!-- Adds cross-origin isolation on hosts that can't set headers (GitHub Pages). -->
+    <script src="./coi-serviceworker.min.js"></script>
+    <!-- crossorigin is required: the page is cross-origin isolated (COEP). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      crossorigin="anonymous"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>A Picture Is Worth <span class="nowrap">1,000 Words</span></h1>
+      <p class="tagline">
+(actually just a few hundred words are enough)
+      </p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="tab-hide" aria-selected="true" aria-controls="hide">Photo to words</button>
+      <button role="tab" id="tab-reveal" aria-selected="false" aria-controls="reveal">Words to photo</button>
+    </nav>
+
+    <main>
+      <section id="hide" role="tabpanel" aria-labelledby="tab-hide">
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept="image/*" />
+          <span class="drop-main">Choose a photo</span>
+          <span class="drop-sub">(or drop one here)</span>
+        </label>
+
+        <div class="setup" id="setup" hidden>
+          <figure class="photo">
+            <canvas id="preview" width="256" height="256"></canvas>
+          </figure>
+          <div class="setup-form">
+            <label for="title">What's the story about?</label>
+            <input id="title" type="text" maxlength="120" autocomplete="off" spellcheck="true" />
+            <div class="meter" id="caption-meter-wrap" aria-hidden="true" hidden>
+              <div class="meter-fill" id="caption-meter"></div>
+            </div>
+            <p class="hint" id="title-hint"></p>
+            <button class="primary" id="write" disabled>Write the story</button>
+            <button class="link" id="another">Choose a different photo</button>
+          </div>
+        </div>
+
+        <article class="story" id="story" hidden>
+          <div class="meter" aria-hidden="true"><div class="meter-fill" id="hide-meter"></div></div>
+          <p class="status" id="hide-status" aria-live="polite"></p>
+          <p id="story-text"></p>
+          <div class="actions" id="story-actions" hidden>
+            <button class="primary swap" id="copy"><span>Copy story</span><span>Copied</span></button>
+            <button id="download">Download .txt</button>
+            <button id="try-reveal">Convert those words into a picture</button>
+          </div>
+        </article>
+        <p class="error" id="hide-error" role="alert" hidden></p>
+      </section>
+
+      <section id="reveal" role="tabpanel" aria-labelledby="tab-reveal" hidden>
+        <label for="doc" class="sr-only">Story</label>
+        <textarea
+          id="doc"
+          rows="12"
+          placeholder="Paste a story here."
+          spellcheck="false"
+        ></textarea>
+        <button class="primary" id="reveal-btn">Reveal the photo</button>
+        <div class="meter" aria-hidden="true" id="reveal-meter-wrap" hidden>
+          <div class="meter-fill" id="reveal-meter"></div>
+        </div>
+        <p class="status" id="reveal-status" aria-live="polite"></p>
+        <figure class="photo result" id="result" hidden>
+          <canvas id="out" width="256" height="256"></canvas>
+        </figure>
+        <p class="error" id="reveal-error" role="alert" hidden></p>
+      </section>
+
+      <aside class="downloads" id="downloads" hidden aria-live="polite">
+        <h3>Downloading models (only the first time)</h3>
+        <ul id="download-list"></ul>
+      </aside>
+    </main>
+
+    <footer>
+      <h3>What is this?</h3>
+      <p>
+        The <strong>Photo to words</strong> panel takes a photo and turns it into a block of text: a short story
+        that reads like any other. Paste that block of text into the <strong>Words to photo</strong> panel, and the
+        photo comes back out of it. The picture is (somehow!) encoded in the words themselves. After all, a picture
+        is worth a thousand words.
+      </p>
+
+      <h3>How it works</h3>
+      <p>
+        A neural image codec (<a href="https://github.com/bytedance/1d-tokenizer">TiTok</a>) squeezes the photo into
+        64 numbers, 768 bits in all. A small vision model
+        (<a href="https://huggingface.co/microsoft/Florence-2-base-ft">Florence-2</a>) describes the photo, and a
+        small language model (<a href="https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct">SmolLM2</a>)
+        opens a story about it. From then on the photo's bits, rather than chance, decide each word it picks,
+        using arithmetic coding. To get the photo back, the same model rereads the story and works out which bits
+        forced each word.
+      </p>
+      <p>
+        Everything runs in your browser; nothing is uploaded. The models download once (about 430&nbsp;MB to turn
+        a photo into words, 250&nbsp;MB to turn words back into a photo) and are cached. Change a single word and
+        the photo is lost, so copy the story exactly.
+      </p>
+    </footer>
+  </body>
+</html>
