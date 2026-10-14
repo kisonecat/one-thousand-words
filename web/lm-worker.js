@@ -36,6 +36,7 @@ function threads() {
 const loadLM = () =>
   lazy('lm', async () => {
     ort.env.wasm.numThreads = threads();
+    ort.env.wasm.wasmPaths = new URL('ort/', appBase).href; // see vite.config.js
     hfEnv.allowLocalModels = false;
     const [bytes, config, tokenizerJson, tokenizer] = await Promise.all([
       fetchBytes(LM_CFG.base + LM_CFG.model, download('Story model')),

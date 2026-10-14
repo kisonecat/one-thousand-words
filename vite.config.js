@@ -41,9 +41,18 @@ export default defineConfig({
   resolve: {
     // The story LM must run the same WASM binary as in Node (the plain
     // ort-wasm-simd-threaded.wasm), not the WebGPU/JSEP build that the bare
-    // 'onnxruntime-web' specifier picks in browsers. transformers.js imports
+    // 'onnxruntime-web' specifier picks in browsers. We use the "extern wasm"
+    // build, which loads ort-wasm-simd-threaded.mjs/.wasm from
+    // ort.env.wasm.wasmPaths (copied to public/ort/): the bundled variant
+    // spawns its pthread workers from import.meta.url, which after bundling is
+    // our lm-worker chunk, so threads never start. transformers.js imports
     // 'onnxruntime-web/webgpu' and is unaffected.
-    alias: [{ find: /^onnxruntime-web$/, replacement: 'onnxruntime-web/wasm' }],
+    alias: [
+      {
+        find: /^onnxruntime-web$/,
+        replacement: resolve(import.meta.dirname, 'node_modules/onnxruntime-web/dist/ort.wasm.min.mjs'),
+      },
+    ],
   },
   server: { headers: isolation },
   preview: { headers: isolation },
